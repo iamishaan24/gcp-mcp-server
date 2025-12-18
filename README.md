@@ -2,10 +2,6 @@
 
 A Model Context Protocol server that connects to Google Cloud services to provide context and tools for interacting with your Google Cloud resources.
 
-<a href="https://glama.ai/mcp/servers/@krzko/google-cloud-mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@krzko/google-cloud-mcp/badge" alt="Google Cloud Server MCP server" />
-</a>
-
 ## Services
 
 Supported Google Cloud services:
@@ -150,7 +146,7 @@ The server will also use the `GOOGLE_CLOUD_PROJECT` environment variable if set,
 
 ```bash
 # Clone the repository
-git clone https://github.com/krzko/google-cloud-mcp.git
+git clone https://github.com/iamishaan24/gcp-mcp-server.git
 cd google-cloud-mcp
 
 # Install dependencies
