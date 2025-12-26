@@ -161,6 +161,35 @@ Authenticate to Google Cloud:
 ```bash
 gcloud auth application-default login
 ```
+To create service account key:
+
+```bash
+gcloud config set project YOUR_PROJECT_ID
+
+gcloud iam service-accounts create mcp-service-account \
+  --display-name="MCP Service Account"
+
+gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
+  --member="serviceAccount:mcp-service-account@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/viewer"
+
+gcloud iam service-accounts keys create mcp-key.json \
+  --iam-account=mcp-service-account@YOUR_PROJECT_ID.iam.gserviceaccount.com
+
+To use the key
+
+Linux/mac
+
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/mcp-key.json"
+
+powershell
+
+$env:GOOGLE_APPLICATION_CREDENTIALS="D:\path\to\mcp-key.json"
+
+
+
+```
+
 
 Configure the `mcpServers` in your client:
 
