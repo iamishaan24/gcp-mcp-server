@@ -2,10 +2,6 @@
 
 A Model Context Protocol server that connects to Google Cloud services to provide context and tools for interacting with your Google Cloud resources.
 
-<a href="https://glama.ai/mcp/servers/@krzko/google-cloud-mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@krzko/google-cloud-mcp/badge" alt="Google Cloud Server MCP server" />
-</a>
-
 ## Services
 
 Supported Google Cloud services:
@@ -150,7 +146,7 @@ The server will also use the `GOOGLE_CLOUD_PROJECT` environment variable if set,
 
 ```bash
 # Clone the repository
-git clone https://github.com/krzko/google-cloud-mcp.git
+git clone https://github.com/iamishaan24/gcp-mcp-server.git
 cd google-cloud-mcp
 
 # Install dependencies
@@ -165,7 +161,32 @@ Authenticate to Google Cloud:
 ```bash
 gcloud auth application-default login
 ```
+To create service account key:
 
+```bash
+gcloud config set project YOUR_PROJECT_ID
+
+gcloud iam service-accounts create mcp-service-account \
+  --display-name="MCP Service Account"
+
+gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
+  --member="serviceAccount:mcp-service-account@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/viewer"
+
+gcloud iam service-accounts keys create mcp-key.json \
+  --iam-account=mcp-service-account@YOUR_PROJECT_ID.iam.gserviceaccount.com
+
+To use the key
+
+Linux/mac
+
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/mcp-key.json"
+
+powershell
+
+$env:GOOGLE_APPLICATION_CREDENTIALS="D:\path\to\mcp-key.json"
+```
+## Configuration
 Configure the `mcpServers` in your client:
 
 ```json
