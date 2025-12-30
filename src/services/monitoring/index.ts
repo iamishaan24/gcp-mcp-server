@@ -13,3 +13,8 @@ export { metricsLookup, Metric, MetricCategory } from "./metrics_lookup.js";
 // Export resources and tools
 export { registerMonitoringResources } from "./resources.js";
 export { registerMonitoringTools } from "./tools.js";
+
+export async function discoverMonitoring() {
+  // Monitoring is enabled by default if project exists
+  return true;
+}

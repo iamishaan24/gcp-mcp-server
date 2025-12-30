@@ -10,3 +10,7 @@ export * from "./types.js";
 // Export resources and tools
 export { registerIamResources } from "./resources.js";
 export { registerIamTools } from "./tools.js";
+export async function discoverIam() {
+  // IAM is enabled by default if project exists
+  return true;
+}

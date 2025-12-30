@@ -5,6 +5,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { getProjectId } from '../../utils/auth.js';
 import { getComputeClient, formatInstance } from './types.js';
+import { getResourceManagerClient } from '../iam/types.js';
 import { ZonesClient } from '@google-cloud/compute';
 import { logger } from '../../utils/logger.js';
 
@@ -591,4 +592,39 @@ export function registerComputeTools(server: McpServer): void {
       }
     },
   );
+
+      // List all accessible project IDs
+      server.registerTool(
+        'gcp-list-project-ids',
+        {
+          title: 'List Project IDs',
+          description: 'List all accessible Google Cloud project IDs',
+          inputSchema: {
+            filter: z.string().optional().describe('Optional filter for projects (e.g., "state:ACTIVE")'),
+            pageSize: z.number().min(1).max(1000).optional().default(200),
+          },
+        },
+        async ({ filter, pageSize }) => {
+          try {
+            const resourceManager = getResourceManagerClient();
+
+            const [projects] = await resourceManager.listProjects({ pageSize, filter } as any);
+
+            if (!projects || projects.length === 0) {
+              return { content: [{ type: 'text', text: `# Projects\n\nNo projects found.` }] };
+            }
+
+            const ids = (projects || [])
+              .map((p: any) => p.projectId || (p.name || '').replace('projects/', '') || '')
+              .filter(Boolean)
+              .join('\n');
+
+            return { content: [{ type: 'text', text: `# Project IDs\n\n${ids}` }] };
+          } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Unknown error';
+            logger.error(`Error listing projects: ${message}`);
+            return { content: [{ type: 'text', text: `# Error Listing Projects\n\n${message}` }], isError: true };
+          }
+        },
+      );
 }
